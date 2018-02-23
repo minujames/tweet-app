@@ -39,7 +39,7 @@ var usersData = {
       'firstName': 'Minu',
       'lastName': 'James',
       'followers': [user_id_jay, user_id_nidhi],
-      'following': [user_id_jack, user_id_jill, user_id_jay, user_id_nidhi]
+      'following': [user_id_jack, user_id_jay, user_id_nidhi]
     },
     {
       '_id': user_id_jay,
@@ -48,7 +48,7 @@ var usersData = {
       'firstName': 'Jay',
       'lastName': 'Santhan',
       'followers': [user_id_minu, user_id_nidhi],
-      'following': [user_id_jack, user_id_jill, user_id_minu]
+      'following': [user_id_jack, user_id_minu]
     },
     {
       '_id': user_id_nidhi,
@@ -74,7 +74,7 @@ var usersData = {
       'userName': 'jill',
       'firstName': 'Jill',
       'lastName': 'Tom',
-      'followers': [user_id_minu, user_id_jay, user_id_jack],
+      'followers': [user_id_jack],
       'following': []
     }
   ]
@@ -139,27 +139,29 @@ var tweetsData = {
   documents: tweets
 }
 
-// jay is following minu, nidhi, jack and jill
+// jay is following minu and jack
 const jaysFeed = minus_tweets.map(tweet => tweet._id);
-
-nidhis_tweets.map(tweet => {
-  jaysFeed.push(tweet._id);
-});
 
 jacks_tweets.map(tweet => {
   jaysFeed.push(tweet._id);
 });
 
-jills_tweets.map(tweet => {
+jays_tweets.map(tweet => {
   jaysFeed.push(tweet._id);
 });
 
 console.log(jaysFeed.length);
 
 
-// minu is following jack and jill
+// minu is following jack, jay and nidhi
 const minusFeed = jacks_tweets.map(tweet => tweet._id);
-jills_tweets.map(tweet => {
+jays_tweets.map(tweet => {
+  minusFeed.push(tweet._id);
+});
+nidhis_tweets.map(tweet => {
+  minusFeed.push(tweet._id);
+});
+minus_tweets.map(tweet => {
   minusFeed.push(tweet._id);
 });
 console.log(minusFeed.length);
@@ -169,15 +171,21 @@ const nidhisFeed = minus_tweets.map(tweet => tweet._id);
 jays_tweets.map(tweet => {
   nidhisFeed.push(tweet._id);
 });
+nidhis_tweets.map(tweet => {
+  nidhisFeed.push(tweet._id);
+});
 console.log(nidhisFeed.length);
 
 
 // jack is following jill
 const jacksFeed = jills_tweets.map(tweet => tweet._id);
 console.log(jacksFeed.length);
+jacks_tweets.map(tweet => {
+  jacksFeed.push(tweet._id);
+});
 
-//jill is following jack
-const jillsFeed = jacks_tweets.map(tweet => tweet._id);
+//jill is not following anybody
+const jillsFeed = jills_tweets.map(tweet => tweet._id);
 console.log(jillsFeed.length);
 
 var feedData = {

@@ -37,10 +37,10 @@ module.exports = {
   login: function(req, res){
     let user;
 
-    if(req.body.name && req.body.password){
+    if(req.body.username && req.body.password){
 
       //mocking ldap with local object
-      user = users[_.findIndex(users, {name: req.body.name})];
+      user = users[_.findIndex(users, {name: req.body.username})];
       if( !user ){
         res.status(401).json({message:"no such user found"});
       }
