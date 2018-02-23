@@ -16,16 +16,12 @@ var UsersSchema = new Schema({
   email: {
     type: String,
     lowercase: true,
-    required: true,
-    unique: true
   },
   firstName: {
     type: String,
-    required: true
   },
   lastName: {
     type: String,
-    required: true
   },
   following: [{
     type: Schema.Types.ObjectId,

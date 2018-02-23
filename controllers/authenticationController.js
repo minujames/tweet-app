@@ -9,18 +9,26 @@ const JwtStrategy = passportJWT.Strategy;
 const keys = require("./../config/keys");
 const users = require("./../seeds/users");
 
+const db = require("../models");
+
 const jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme("jwt");
 jwtOptions.secretOrKey = keys.jwtSecret;
 
 const strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
   // should be a database call
-  const user = users[_.findIndex(users, {id: jwt_payload.id})];
-  if (user) {
-    next(null, user);
-  } else {
-    next(null, false);
-  }
+  console.log(jwt_payload.id);
+  db.Users
+    .findById(jwt_payload.id)
+    .then(appUser => {
+      console.log(appUser);
+      if (appUser) {
+        next(null, appUser);
+      } else {
+        next(null, false);
+      }
+    })
+    .catch(err => next(null, false));
 });
 
 passport.use(strategy);
@@ -31,22 +39,56 @@ module.exports = {
 
     if(req.body.name && req.body.password){
 
+      //mocking ldap with local object
       user = users[_.findIndex(users, {name: req.body.name})];
       if( !user ){
         res.status(401).json({message:"no such user found"});
       }
-    }
 
-    if(user.password === req.body.password) {
-      const payload = {
-        id: user.id
-      };
-      const token = jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: 60 });
-      res.json({message: "ok",
-        username: user.name,
-        token: 'JWT ' + token});
-    } else {
-      res.status(401).json({message:"passwords did not match"});
+      if(user.password === req.body.password) {   
+        db.Users
+        .findOne({uuid: user.id})
+        .then(appUser => {
+          if(!appUser){
+             appUser = db.Users
+            .create({
+              uuid: user.id, 
+              userName: user.name
+            })
+          }
+          return appUser;
+        })
+        .then(appUser =>{
+          db.Feed
+          .findOne({userId: appUser.id})
+          .then(feed => {
+            if(!feed){
+              db.Feed
+              .create({
+                userId: appUser._id
+              })
+            }
+          })
+          return appUser;
+        })
+        .then(appUser => {
+          const payload = {
+            id: appUser.id
+          };
+          const token = jwt.sign(payload, jwtOptions.secretOrKey, { expiresIn: 60 * 60 });
+          res.json({message: "ok",
+            username: appUser.userName,
+            token: 'JWT ' + token
+          });
+        })
+        .catch(err => res.status(422).json(err));
+
+      } else {
+        res.status(401).json({message:"passwords did not match"});
+      }
+    }
+    else{
+      res.status(401).json({message: "Username or password is missing"});
     }
   }
 };

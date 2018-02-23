@@ -10,7 +10,7 @@ const morgan = require('morgan');
 var passport = require("passport");
 
 var app = express();
-app.use(morgan('dev')); // log every request to the console
+app.use(morgan('dev'));
 app.use(passport.initialize());
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,11 +25,7 @@ mongoose.Promise = global.Promise;
 
 // Connect to the Mongo DB
 mongoose.connect(
-  process.env.MONGODB_URI || "mongodb://localhost/intweet_db",
-  {
-    useMongoClient: true
-  }
-);
+process.env.MONGODB_URI || "mongodb://localhost/intweet_db");
 
 app.listen(PORT, function() {
   console.log(`🌎 ==> Server now on port ${PORT}!`);

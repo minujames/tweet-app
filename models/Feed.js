@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var FeedSchema = new Schema({
-  user: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: "Users",
     required: true

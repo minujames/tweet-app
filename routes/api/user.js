@@ -1,14 +1,13 @@
 const router = require("express").Router();
-var passport = require("passport"); 
-// const usersController = require("../../controllers/usersController");
+const passport = require("passport"); 
+const usersController = require("../../controllers/usersController");
+const tweetsController = require("../../controllers/tweetsController");
 
-router.get("/feed", passport.authenticate('jwt', { session: false }), function(req, res){
-  console.log(req.user);
-  res.json({
-    1: "tweet-1",
-    2: "tweet-2",
-    3: "tweet-3"
-  });
-});
+
+router.route("/feed")
+  .get(passport.authenticate('jwt', { session: false }), usersController.getFeed);
+
+router.route("/tweet")
+  .post(passport.authenticate('jwt', { session: false }), tweetsController.createTweet);
 
 module.exports = router;

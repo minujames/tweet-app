@@ -6,7 +6,6 @@ var TweetsSchema = new Schema({
   tweet: {
     type: String,
     required: true,
-    unique: true
   },
   userId: {
     type: Schema.Types.ObjectId,
@@ -24,7 +23,6 @@ var TweetsSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Comments" 
   }],
-  //use $addToSet to push data to prevent duplication
   likes: [{
     type: Schema.Types.ObjectId,
     ref: "Users"
