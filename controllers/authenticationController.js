@@ -7,7 +7,7 @@ const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 
 const keys = require("./../config/keys");
-const users = require("./../seeds/users");
+const users = require("./../config/users");
 
 const db = require("../models");
 

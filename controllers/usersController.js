@@ -8,8 +8,9 @@ module.exports = {
     .find({"userId": req.user._id})
     .populate("feed")
     .then(userFeed => {
-      res.json({feed: feed.slice(-100)});
+      console.log(userFeed[0].feed.length, userFeed[0].feed.slice(-100).length);
+      res.json(userFeed[0].feed.slice(-100));
     })
-    .catch(err => res.status(422).json(err));
+    // .catch(err => res.status(422).json(err));
   }
 };
