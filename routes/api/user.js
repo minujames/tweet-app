@@ -3,6 +3,7 @@ var passport = require("passport");
 // const usersController = require("../../controllers/usersController");
 
 router.get("/feed", passport.authenticate('jwt', { session: false }), function(req, res){
+  console.log(req.user);
   res.json({
     1: "tweet-1",
     2: "tweet-2",
